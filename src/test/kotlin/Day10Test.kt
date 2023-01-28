@@ -1,6 +1,4 @@
-import Day10
 import org.junit.jupiter.api.Test
-import readResourceFile
 import kotlin.io.path.readText
 import kotlin.test.assertEquals
 
@@ -23,7 +21,7 @@ internal class Day10Test {
 
         val output: Int = day10.solvePart1(input)
 
-        assertEquals(-1, output)
+        assertEquals(12540, output)
     }
 
     @Test
