@@ -12,7 +12,7 @@ internal class Day11Test {
 
         val output: Int = day11.solvePart1(input)
 
-        assertEquals(-1, output)
+        assertEquals(10605, output)
     }
 
     @Test
@@ -21,7 +21,7 @@ internal class Day11Test {
 
         val output: Int = day11.solvePart1(input)
 
-        assertEquals(-1, output)
+        assertEquals(121450, output)
     }
 
     @Test
