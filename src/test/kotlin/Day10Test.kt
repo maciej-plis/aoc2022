@@ -28,17 +28,19 @@ internal class Day10Test {
     fun part2_testInput() {
         val input = readResourceFile("advent-of-code-2022/day-10-test").readText()
 
-        val output: Int = day10.solvePart2(input)
+        val output: String = day10.solvePart2(input)
 
-        assertEquals(-1, output)
+        val expectedImage = "\n##..##..##..##..##..##..##..##..##..##..\n###...###...###...###...###...###...###.\n####....####....####....####....####....\n#####.....#####.....#####.....#####.....\n######......######......######......####\n#######.......#######.......#######....."
+        assertEquals(expectedImage, output)
     }
 
     @Test
     fun part2_fullInput() {
         val input = readResourceFile("advent-of-code-2022/day-10").readText()
 
-        val output: Int = day10.solvePart2(input)
+        val output: String = day10.solvePart2(input)
 
-        assertEquals(-1, output)
+        val expectedImage = "\n####.####..##..####.####.#....#..#.####.\n#....#....#..#....#.#....#....#..#.#....\n###..###..#......#..###..#....####.###..\n#....#....#.....#...#....#....#..#.#....\n#....#....#..#.#....#....#....#..#.#....\n#....####..##..####.####.####.#..#.####."
+        assertEquals(expectedImage, output)
     }
 }
