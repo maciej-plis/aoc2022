@@ -4,11 +4,16 @@ class Day13 {
 
     fun solvePart1(input: String) = parseInputToPacketPairs(input)
         .map { it[0].compareTo(it[1]) }
-        .mapIndexed { index, it -> println("Pair ${index+1}: $it"); return@mapIndexed it }
         .foldIndexed(0) { index, acc, result -> if (result > 0) acc + index + 1 else acc }
 
     fun solvePart2(input: String): Int {
-        return 0
+        val packets = parseInputToPacketPairs(input).flatten().toMutableList()
+        val dividerPacket1 = parsePacket("[[2]]").also { packets.add(it) }
+        val dividerPacket2 = parsePacket("[[6]]").also { packets.add(it) }
+
+        packets.sortDescending()
+
+        return (packets.indexOf(dividerPacket1) + 1) * (packets.indexOf(dividerPacket2) + 1)
     }
 
     private sealed interface Packet : Comparable<Packet>
@@ -21,6 +26,8 @@ class Day13 {
             is PacketList -> asPacketList().compareTo(other)
             is ValuePacket -> compareValues(other)
         }
+
+        override fun toString() = "$value"
 
         private fun compareValues(other: ValuePacket) = other.value.compareTo(this.value)
     }
@@ -35,6 +42,8 @@ class Day13 {
             is ValuePacket -> compareLists(other.asPacketList())
             is PacketList -> compareLists(other)
         }
+
+        override fun toString() = "$subPackets"
 
         private fun compareLists(other: PacketList): Int {
             for (i in 0..min(this.subPackets.lastIndex, other.subPackets.lastIndex)) {
