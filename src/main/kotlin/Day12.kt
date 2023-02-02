@@ -70,6 +70,8 @@ value class Coordinates(private val coordinates: Pair<Int, Int>) {
         get() = coordinates.second
 
     constructor(x: Int, y: Int) : this(x to y)
+
+    override fun toString() = "[X = $x, Y = $y]"
 }
 
 @JvmInline
