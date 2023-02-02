@@ -5,55 +5,41 @@ import kotlin.math.min
 
 class Day14 {
 
-    fun solvePart1(input: String): Int {
+    fun solvePart1(input: String) = solve(input).first
+
+    fun solvePart2(input: String) = solve(input).second
+
+    private fun solve(input: String): Pair<Int, Int> {
         val rockFormations = input.lines()
             .map { it.split(" -> ") }
             .map { it.map { parsePoint(it) } }
             .map { createLines(it) }
             .flatten()
 
-        val caveHeight = rockFormations.maxBy { max(it.start.y, it.end.y) }.let { max(it.start.y, it.end.y) } + 1
-        val cave = Array(caveHeight) { BooleanArray(200) }
+        val caveHeight = rockFormations.maxBy { max(it.start.y, it.end.y) }.let { max(it.start.y, it.end.y) } + 2
+        val cave = Array(caveHeight) { BooleanArray(1000) }
         rockFormations.forEach { it.forEach { cave.mark(it) } }
 
-        printCave(cave)
-
-        var count = 0
-        var finish = false
+        var totalCount = 0
+        var firstBeyond = 0
         DeepRecursiveFunction { tile: Point ->
-            if (tile.y >= caveHeight) finish = true
-            if (finish || cave[tile.y][tile.x]) return@DeepRecursiveFunction
+            if (firstBeyond == 0 && tile.y >= caveHeight) firstBeyond = totalCount
+            if (tile.y >= caveHeight || cave[tile.y][tile.x]) return@DeepRecursiveFunction
 
             callRecursive(Point(tile.x, tile.y + 1))
             callRecursive(Point(tile.x - 1, tile.y + 1))
             callRecursive(Point(tile.x + 1, tile.y + 1))
 
-            if (!cave[tile.y][tile.x] && !finish) {
+            if (!cave[tile.y][tile.x]) {
                 cave[tile.y][tile.x] = true
-                count++
+                totalCount++
             }
 
-        }(Point(100, 0))
+        }(Point(500, 0))
 
-        printCave(cave)
-
-        return count
+        return firstBeyond to totalCount
     }
 
-    fun solvePart2(input: String): Int {
-        return 0
-    }
-
-    private fun printCave(cave: Array<BooleanArray>) {
-        for (row in cave) {
-            for (tile in row) {
-                if (tile) print('#') else print('.')
-            }
-            println()
-        }
-    }
-
-    data class RockPath(val lines: List<Line>)
     data class Point(val x: Int, val y: Int)
     enum class LineType { HORIZONTAL, VERTICAL }
     data class Line(val start: Point, val end: Point) : Iterable<Point> {
@@ -73,7 +59,7 @@ class Day14 {
         }
     }
 
-    private fun parsePoint(point: String) = point.split(",").let { return@let Point(it[0].toInt() - 400, it[1].toInt()) }
+    private fun parsePoint(point: String) = point.split(",").let { return@let Point(it[0].toInt(), it[1].toInt()) }
     private fun createLines(points: List<Point>): List<Line> {
         val lines = mutableListOf<Line>()
         var prevPoint = points.first()
